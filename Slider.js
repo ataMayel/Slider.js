@@ -9,13 +9,14 @@ class Slider {
         this.nav = options.navigation || null;
         this.current = 0;
         this.gap = options.gap || 0;
+        this.rtl = options.rtl || false;
         this.interval = null;
         return this;
     }
     start() {
         this.slider.style.gap = `${this.gap}px`;
         this.slider.style.scrollBehavior = 'smooth';
-        this.slider.style.dir = this.dir;
+        this.slider.style.direction = this.rtl ? 'rtl' : 'ltr';
         setTimeout(() => {
             if (this.autoPlay) {
                 this.delay = this.autoPlay.delay || 1000;
@@ -52,9 +53,10 @@ class Slider {
     }
     goTo(i) {
         const w = this.slides[i].offsetWidth;
-        this.slider.scrollLeft = (w + this.gap) * i;
-        this.current = i
-        if (this.nav) this.activeItem(i)
+        if (this.rtl) this.slider.scrollLeft = -((w + this.gap) * i)
+        else this.slider.scrollLeft = (w + this.gap) * i;
+        this.current = i;
+        if (this.nav) this.activeItem(i);
     }
     useCtrls(pervBtn, nextBtn) {
         this.click(pervBtn, () => this.perv())
